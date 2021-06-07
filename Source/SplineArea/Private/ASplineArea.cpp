@@ -1,18 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Robin Smekens 2021 
 
-#include "Shake_TeleportationArea.h"
+#include "ASplineArea.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/SplineComponent.h"
-#include "Materials/Material.h"
-#include "Materials/MaterialInstance.h"
 #include "Materials/MaterialInterface.h"
-
-#include "ConstructorHelpers.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
-AShake_TeleportationArea::AShake_TeleportationArea()
+ASplineArea::ASplineArea()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -32,7 +28,7 @@ AShake_TeleportationArea::AShake_TeleportationArea()
 
 	if (pAreaOutline == nullptr)
 	{
-		static ConstructorHelpers::FObjectFinder<UStaticMesh> foundMesh(TEXT("StaticMesh'/SplineArea/Models/SM_Plane.SM_Plane'"));
+		static ConstructorHelpers::FObjectFinder<UStaticMesh> foundMesh(TEXT("StaticMesh'/SplineArea/Models/SM_Unit_Plane.SM_Unit_Plane'"));
 		if (foundMesh.Succeeded())
 			pAreaOutline->SetStaticMesh(foundMesh.Object);
 	}
@@ -40,14 +36,14 @@ AShake_TeleportationArea::AShake_TeleportationArea()
 	if (pAreaMeshMaterial == nullptr)
 	{
 
-		static ConstructorHelpers::FObjectFinder<UMaterialInterface> foundMaterial(TEXT("Material'/SplineArea/Materials/TeleportationArea/M_TeleportationArea.M_TeleportationArea'"));
+		static ConstructorHelpers::FObjectFinder<UMaterialInterface> foundMaterial(TEXT("Material'/SplineArea/Materials/M_SplineArea.M_SplineArea'"));
 		if (foundMaterial.Succeeded())
 			pAreaMeshMaterial = foundMaterial.Object;
 	}
 
 	if (pAreaOutlineMaterial == nullptr)
 	{
-		static ConstructorHelpers::FObjectFinder<UMaterialInterface> foundMaterial(TEXT("Material'/SplineArea/Materials/TeleportationArea/M_TeleportationArea_Outline.M_TeleportationArea_Outline'"));
+		static ConstructorHelpers::FObjectFinder<UMaterialInterface> foundMaterial(TEXT("Material'/SplineArea/Materials/M_SplineArea_Outline.M_SplineArea_Outline'"));
 		if (foundMaterial.Succeeded())
 		{
 			pAreaOutlineMaterial = foundMaterial.Object;
@@ -57,18 +53,18 @@ AShake_TeleportationArea::AShake_TeleportationArea()
 }
 
 // Called when the game starts or when spawned
-void AShake_TeleportationArea::BeginPlay()
+void ASplineArea::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
 // Called every frame
-void AShake_TeleportationArea::Tick(float DeltaTime)
+void ASplineArea::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AShake_TeleportationArea::OnConstruction(const FTransform& Transform)
+void ASplineArea::OnConstruction(const FTransform& Transform)
 {
 	CreateTeleportationArea();
 
@@ -78,7 +74,7 @@ void AShake_TeleportationArea::OnConstruction(const FTransform& Transform)
 	}
 }
 
-void AShake_TeleportationArea::CreateTeleportationArea()
+void ASplineArea::CreateTeleportationArea()
 {
 	VisualizationTriangles.Reset(0);
 	TArray<MeshTriangle> meshTriangles;
@@ -89,7 +85,7 @@ void AShake_TeleportationArea::CreateTeleportationArea()
 	CreateAreaOutline();
 }
 
-void AShake_TeleportationArea::ClearSpline() const
+void ASplineArea::ClearSpline() const
 {
 	pSpline->ClearSplinePoints(true);
 
@@ -193,7 +189,7 @@ inline bool IsPointAnEar(const int curPointIndex, const TArray<int>& reflexIndic
 	return IsEar;
 }
 
-void AShake_TeleportationArea::TriangulateSpline()
+void ASplineArea::TriangulateSpline()
 {
 	TArray<FVector> splinePoints = GetSplinePoints();
 	TArray<FVector> reflexPoints = TArray<FVector>{};
@@ -213,7 +209,7 @@ void AShake_TeleportationArea::TriangulateSpline()
 	TrianglesFromPoints(splinePoints, convexIndices, reflexIndices, earIndices);
 }
 
-void AShake_TeleportationArea::GetPolygonComponents(const TArray<FVector>& splinePoints, TArray<FVector>& reflexPoints, TArray<FVector>& convexPoints, TArray<FVector>&
+void ASplineArea::GetPolygonComponents(const TArray<FVector>& splinePoints, TArray<FVector>& reflexPoints, TArray<FVector>& convexPoints, TArray<FVector>&
 	earPoints, TArray<int>& reflexIndices, TArray<int>& convexIndices, TArray<int>& earIndices) const
 {
 	//Testing if point is convex or reflex
@@ -259,12 +255,12 @@ void AShake_TeleportationArea::GetPolygonComponents(const TArray<FVector>& splin
 	}
 }
 
-void AShake_TeleportationArea::TrianglesFromPoints(TArray<FVector>& splinePoints, const TArray<int>& convexIndices, const TArray<int>& reflexIndices, const TArray<
-	int>& earIndices)
+void ASplineArea::TrianglesFromPoints(TArray<FVector>& splinePoints, const TArray<int>& inConvexIndices, const TArray<int>& inReflexIndices, const TArray<
+	int>& inEarIndices)
 {
 	int curPoint = 0;
-	if (earIndices.Num() > 0)
-		curPoint = earIndices[0];
+	if (inEarIndices.Num() > 0)
+		curPoint = inEarIndices[0];
 	int prevPoint = CircularIndex(curPoint - 1, splinePoints.Num());
 	int nextPoint = CircularIndex(curPoint + 1, splinePoints.Num());
 
@@ -300,7 +296,7 @@ void AShake_TeleportationArea::TrianglesFromPoints(TArray<FVector>& splinePoints
 	}
 }
 
-TArray<FVector> AShake_TeleportationArea::GetSplinePoints()
+TArray<FVector> ASplineArea::GetSplinePoints()
 {
 	TArray<FVector> splinePoints;
 	for (int i = 0; i < pSpline->GetNumberOfSplinePoints(); i++)
@@ -310,7 +306,7 @@ TArray<FVector> AShake_TeleportationArea::GetSplinePoints()
 	return splinePoints;
 }
 
-void AShake_TeleportationArea::TrianglesToIndices(const TArray<MeshTriangle>& triangles, TArray<FVector>& vertices, TArray<int>& indices) const
+void ASplineArea::TrianglesToIndices(const TArray<MeshTriangle>& triangles, TArray<FVector>& vertices, TArray<int>& indices) const
 {
 	for (int i = 0; i < triangles.Num(); i++)
 	{
@@ -334,7 +330,7 @@ void AShake_TeleportationArea::TrianglesToIndices(const TArray<MeshTriangle>& tr
 	}
 }
 
-void AShake_TeleportationArea::CreateAreaMesh()
+void ASplineArea::CreateAreaMesh()
 {
 	TArray<FVector> vertices;
 	TArray<int> indices;
@@ -366,9 +362,18 @@ void AShake_TeleportationArea::CreateAreaMesh()
 	pAreaMesh->SetMaterial(0, pAreaMeshMaterial);
 }
 
-void AShake_TeleportationArea::CreateAreaOutline()
+void ASplineArea::CreateAreaOutline()
 {
+	if(bEnableOutline == false)
+	{
+		pAreaOutline->ClearInstances();
+		pAreaOutline->SetVisibility(false);
+		return;
+	}
+	
 	pAreaOutline->ClearInstances();
+	pAreaOutline->SetVisibility(true);
+	
 	int instanceCount = pSpline->GetNumberOfSplinePoints();
 	for (int i = 0; i < instanceCount; i++)
 	{
@@ -380,13 +385,13 @@ void AShake_TeleportationArea::CreateAreaOutline()
 		FTransform newTransform;
 		newTransform.SetLocation(FMath::Lerp(firstPoint, secondPoint, 0.5f));
 		newTransform.SetRotation(FQuat(FRotator(rotationToPoint.Pitch, rotationToPoint.Yaw, 1.f)));
-		newTransform.SetScale3D(FVector(length, OutlineWidth, 0.f));
+		newTransform.SetScale3D(FVector(length * 0.005f, OutlineWidth, 1.f));
 
 		pAreaOutline->AddInstanceWorldSpace(newTransform);
 	}
 }
 
-void AShake_TeleportationArea::SetAreaActive(bool newState)
+void ASplineArea::SetAreaActive(bool newState)
 {
 	if (pAreaMesh == nullptr)
 		return;
@@ -407,4 +412,3 @@ void AShake_TeleportationArea::SetAreaActive(bool newState)
 		pAreaOutline->SetVisibility(false);
 	}
 }
-

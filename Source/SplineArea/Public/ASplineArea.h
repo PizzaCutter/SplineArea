@@ -1,10 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Robin Smekens 2021 
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Shake_TeleportationArea.generated.h"
+#include "ASplineArea.generated.h"
 
 class USplineComponent;
 class UProceduralMeshComponent;
@@ -19,23 +19,18 @@ struct MeshTriangle
 };
 
 UCLASS()
-class SHAKEVR_API AShake_TeleportationArea : public AActor
+class SPLINEAREA_API ASplineArea : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AShake_TeleportationArea();
+	ASplineArea();
 
-	//VARIABLES
 private:
 	TArray<MeshTriangle> VisualizationTriangles;
 	float StandardSize = 50.f;
 
-	//FUNCTIONS
-private:
-
-	//VARIABLES
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Default)
 		USplineComponent* pSpline = nullptr;
@@ -49,8 +44,11 @@ protected:
 		UMaterialInterface* pAreaOutlineMaterial = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Default)
-		float OutlineWidth = 2.f;
-	//FUCNTIONS
+	bool bEnableOutline = true;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Default, meta = (EditCondition = "bEnableOutline"))
+	float OutlineWidth = 2.f;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -103,11 +101,11 @@ protected:
 	/// From the different types of vertices can figure out how the triangles need to laid out for the mesh
 	/// </summary>
 	/// <param name="splinePoints"> Needs a copy of the positional data of the spline </param>
-	/// <param name="convexIndices"> Empty array that will hold the reflex points afterwards </param>
-	/// <param name="reflexIndices"> Empty array that will hold the convex points afterwards </param>
-	/// <param name="earIndices"> Empty array that will hold the earPoints afterwards </param>
-	void TrianglesFromPoints(TArray<FVector>& splinePoints, const TArray<int>& convexIndices, const TArray<int>& reflexIndices, const TArray<
-		int>& earIndices);
+	/// <param name="inConvexIndices"> Empty array that will hold the reflex points afterwards </param>
+	/// <param name="inReflexIndices"> Empty array that will hold the convex points afterwards </param>
+	/// <param name="inEarIndices"> Empty array that will hold the earPoints afterwards </param>
+	void TrianglesFromPoints(TArray<FVector>& splinePoints, const TArray<int>& inConvexIndices, const TArray<int>& inReflexIndices, const TArray<
+		int>& inEarIndices);
 
 	/// <summary>
 	/// Creates an index list from the triangle points
