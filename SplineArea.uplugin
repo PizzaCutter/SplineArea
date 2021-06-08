@@ -1,12 +1,12 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1",
 	"FriendlyName": "SplineArea",
 	"Description": "Creating mesh using the procedural mesh component using the spline component",
 	"Category": "Other",
 	"CreatedBy": "Robin Smekens",
-	"CreatedByURL": "",
+	"CreatedByURL": "www.robinsmekens.com",
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
@@ -18,7 +18,10 @@
 		{
 			"Name": "SplineArea",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [
+                 "Win64"
+      ]
 		}
 	],
 	"Plugins": [

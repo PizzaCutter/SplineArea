@@ -3,9 +3,12 @@
 #include "ASplineArea.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/SplineComponent.h"
+#include "Engine/StaticMesh.h"
+
 #include "Materials/MaterialInterface.h"
 #include "Components/InstancedStaticMeshComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "UObject/ConstructorHelpers.h"
 
 // Sets default values
 ASplineArea::ASplineArea()
@@ -31,7 +34,10 @@ ASplineArea::ASplineArea()
         static ConstructorHelpers::FObjectFinder<UStaticMesh> foundMesh(
             TEXT("StaticMesh'/SplineArea/Models/SM_Unit_Plane.SM_Unit_Plane'"));
         if (foundMesh.Succeeded())
+        {
+            //UStaticMesh* areaOutlineMesh = foundMesh.Object; 
             pAreaOutline->SetStaticMesh(foundMesh.Object);
+        }
     }
 
     if (pAreaMeshMaterial == nullptr)
