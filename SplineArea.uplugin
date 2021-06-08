@@ -1,18 +1,18 @@
 {
 	"FileVersion": 3,
-	"Version": 1,
+	"Version": 0.1,
 	"VersionName": "0.1",
 	"FriendlyName": "SplineArea",
 	"Description": "Creating mesh using the procedural mesh component using the spline component",
 	"Category": "Other",
 	"CreatedBy": "Robin Smekens",
 	"CreatedByURL": "www.robinsmekens.com",
-	"DocsURL": "",
-	"MarketplaceURL": "",
+	"DocsURL": "https://github.com/PizzaCutter/SplineArea",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/01320bbc574848a192f95717b26abf4d",
 	"SupportURL": "",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
+	"IsExperimentalVersion": true,
 	"Installed": false,
 	"Modules": [
 		{
