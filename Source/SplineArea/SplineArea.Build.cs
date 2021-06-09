@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Robin Smekens 2021 
+// Copyright 2021 Robin Smekens
+
 
 using UnrealBuildTool;
 
