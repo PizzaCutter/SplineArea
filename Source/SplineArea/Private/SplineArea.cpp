@@ -1,5 +1,4 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
-// Copyright 2021 Robin Smekens
+﻿// Copyright 2021 Robin Smekens
 
 #include "SplineArea.h"
 
