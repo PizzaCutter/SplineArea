@@ -54,12 +54,6 @@ protected:
     virtual void BeginPlay() override;
 
     /// <summary>
-    /// Calls all the other functions to generate the area
-    /// </summary>
-    void CreateTeleportationArea();
-
-
-    /// <summary>
     /// Creates starting array of reflex, convex, ear vertices. Returns the final mesh triangles
     /// </summary>
     void TriangulateSpline();
@@ -71,17 +65,6 @@ protected:
     /// Creates instances of meshes to create an outline effect around the generated area
     /// </summary>
     void CreateAreaOutline() const;
-
-
-    /// <summary>
-    /// Clears the current spline and adds 4 linear points in the shape of a square based on the StandardSize variable
-    /// </summary>
-    void ClearSpline() const;
-    /// <summary>
-    /// Returns a TArray with all the positional data of the spline
-    /// </summary>
-    TArray<FVector> GetSplinePoints() const;
-
 
     /// <summary>
     /// Figures out which spline points are convex, reflex, ear. Based on this we create an index table for each type.
@@ -123,9 +106,27 @@ public:
     virtual void Tick(float DeltaTime) override;
     virtual void OnConstruction(const FTransform& Transform);
 
-    UFUNCTION(BlueprintCallable)
     /// <summary>
     /// Disables/Enables the collision en visibility of the teleportation area based on the boolean
     /// </summary>
+    UFUNCTION(BlueprintCallable)
     void SetAreaActive(bool newState) const;
+    
+    /// <summary>
+    /// Calls all the other functions to generate the area
+    /// </summary>
+    UFUNCTION(BLueprintCallable)
+    void CreateTeleportationArea();
+    
+    /// <summary>
+    /// Clears the current spline and adds 4 linear points in the shape of a square based on the StandardSize variable
+    /// </summary>
+    UFUNCTION(BlueprintCallable)
+    void ClearSpline() const;
+    
+    /// <summary>
+    /// Returns a TArray with all the positional data of the spline
+    /// </summary>
+    UFUNCTION(BlueprintPure)
+    TArray<FVector> GetSplinePoints() const;
 };
