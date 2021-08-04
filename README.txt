@@ -6,3 +6,4 @@ HOW TO USE:
 TEST PROJECT:
  - The plugin comes packaged with M_SplineArea (SplineArea/Content/Maps)
 
+![SHOWING SPLINE AREA CONTENT](https://github.com/PizzaCutter/SplineArea/master/HowToSeeSplineAreaContent.png?raw=true)
