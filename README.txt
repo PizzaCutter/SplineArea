@@ -6,4 +6,4 @@ HOW TO USE:
 TEST PROJECT:
  - The plugin comes packaged with M_SplineArea (SplineArea/Content/Maps)
 
-![SHOWING SPLINE AREA CONTENT](HowToSeeSplineAreaContent.png)
+![SHOWING SPLINE AREA CONTENT](HowToSeeSplineAreaContent.jpg)
